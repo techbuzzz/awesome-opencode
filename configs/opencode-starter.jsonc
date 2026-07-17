@@ -1,0 +1,130 @@
+// opencode.jsonc — Starter configuration for .NET / Go / TypeScript projects
+// Place in: ~/.config/opencode/opencode.jsonc (global) or ./opencode.jsonc (project)
+// Schema: https://opencode.ai/config.json
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // ── Model ────────────────────────────────────────────────────────────────
+  "model": "anthropic/claude-sonnet-4-5",
+  // Alternatives:
+  // "openai/gpt-4o"
+  // "google/gemini-2.5-pro"
+
+  // ── Auto-update ──────────────────────────────────────────────────────────
+  "autoupdate": true,
+
+  // ── MCP Servers ──────────────────────────────────────────────────────────
+  "mcp": {
+    // Context7: Up-to-date library documentation (prevents hallucinating old APIs)
+    // Usage: add "use context7" to your prompts
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+      // Optional: sign up at context7.com and add API key for higher rate limits
+      // "headers": { "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}" }
+    },
+
+    // Grep by Vercel: Search code snippets across GitHub
+    // Usage: "use the gh_grep tool to find examples of..."
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app",
+      "enabled": false  // Enable when needed (adds tokens)
+    },
+
+    // GitHub: Repository, PRs, issues, code search
+    // ⚠️ Heavy token consumer — enable per-agent only
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "oauth": {},
+      "enabled": false
+    },
+
+    // Filesystem: Read/write local files
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "."],
+      "enabled": true
+    },
+
+    // Playwright: Browser automation for E2E testing
+    // ⚠️ Enable per-agent only for testing tasks
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp"],
+      "enabled": false
+    },
+
+    // Sentry: Query errors and issues
+    "sentry": {
+      "type": "remote",
+      "url": "https://mcp.sentry.dev/mcp",
+      "oauth": {},
+      "enabled": false
+    }
+  },
+
+  // ── Tool Management ───────────────────────────────────────────────────────
+  // Disable heavy tools globally, enable per-agent
+  "tools": {
+    "github_*": false,       // disabled globally — too many tokens
+    "playwright_*": false,   // disabled globally — enable in e2e-tester agent
+    "gh_grep_*": false       // disabled globally — enable on demand
+  },
+
+  // ── Skill Permissions ─────────────────────────────────────────────────────
+  "permission": {
+    "skill": {
+      "*": "allow",          // allow all skills by default
+      "experimental-*": "ask" // ask before loading experimental skills
+    }
+  },
+
+  // ── Instructions / AGENTS.md ─────────────────────────────────────────────
+  // OpenCode loads these files as system context for every session
+  "instructions": [
+    "AGENTS.md"
+    // "docs/ARCHITECTURE.md"  // uncomment for architecture context
+    // "docs/API-STANDARDS.md" // uncomment for API conventions
+  ],
+
+  // ── Custom Agents ─────────────────────────────────────────────────────────
+  "agent": {
+    // PR Review Agent — enable GitHub tools
+    "pr-reviewer": {
+      "model": "anthropic/claude-opus-4-5",
+      "tools": {
+        "github_*": true      // enable GitHub for this agent only
+      },
+      "permission": {
+        "skill": {
+          "code-review": "allow",
+          "security-audit": "allow"
+        }
+      }
+    },
+
+    // E2E Testing Agent — enable Playwright
+    "e2e-tester": {
+      "tools": {
+        "playwright_*": true
+      },
+      "permission": {
+        "skill": { "tdd": "allow" }
+      }
+    },
+
+    // Documentation Agent — read-only, no bash
+    "doc-writer": {
+      "tools": {
+        "bash": false,
+        "write": true
+      },
+      "permission": {
+        "skill": { "*": "allow" }
+      }
+    }
+  }
+}

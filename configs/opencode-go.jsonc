@@ -1,0 +1,66 @@
+// opencode.jsonc — Configuration for Go microservices projects
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+
+  "mcp": {
+    // gopls — Go language server: code nav, analysis, refactoring
+    "gopls": {
+      "type": "local",
+      "command": ["gopls", "mcp"],
+      "enabled": true
+    },
+
+    // Context7 — latest Go stdlib and popular package docs
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+
+    // PostgreSQL — direct DB access
+    "postgres": {
+      "type": "local",
+      "command": [
+        "npx", "-y", "@modelcontextprotocol/server-postgres",
+        "{env:DATABASE_URL}"
+      ],
+      "enabled": true
+    },
+
+    // GitHub — code search and PR review
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "oauth": {},
+      "enabled": false
+    }
+  },
+
+  "tools": { "github_*": false },
+
+  "permission": {
+    "skill": {
+      "go-expert": "allow",
+      "code-review": "allow",
+      "tdd": "allow",
+      "security-audit": "allow",
+      "git-flow": "allow",
+      "*": "allow"
+    }
+  },
+
+  "agent": {
+    "pr-reviewer": {
+      "tools": { "github_*": true },
+      "permission": {
+        "skill": {
+          "code-review": "allow",
+          "go-expert": "allow"
+        }
+      }
+    }
+  },
+
+  "instructions": ["AGENTS.md"]
+}

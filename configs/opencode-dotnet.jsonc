@@ -1,0 +1,74 @@
+// opencode.jsonc — Configuration for .NET / ASP.NET Core projects
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+
+  "mcp": {
+    // Context7 — fetch latest .NET/EF/ASP.NET docs
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+
+    // PostgreSQL — direct DB access for development
+    "postgres": {
+      "type": "local",
+      "command": [
+        "npx", "-y", "@modelcontextprotocol/server-postgres",
+        "{env:DATABASE_URL}"
+      ],
+      "enabled": true
+    },
+
+    // Sentry — check production errors
+    "sentry": {
+      "type": "remote",
+      "url": "https://mcp.sentry.dev/mcp",
+      "oauth": {},
+      "enabled": false
+    },
+
+    // GitHub — PR review and code search
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "oauth": {},
+      "enabled": false
+    }
+  },
+
+  "tools": {
+    "github_*": false,
+    "sentry_*": false
+  },
+
+  "permission": {
+    "skill": {
+      "dotnet-expert": "allow",
+      "code-review": "allow",
+      "tdd": "allow",
+      "security-audit": "allow",
+      "git-flow": "allow",
+      "*": "allow"
+    }
+  },
+
+  "agent": {
+    "code-reviewer": {
+      "model": "anthropic/claude-opus-4-5",
+      "tools": { "github_*": true },
+      "permission": {
+        "skill": {
+          "code-review": "allow",
+          "dotnet-expert": "allow",
+          "security-audit": "allow"
+        }
+      }
+    }
+  },
+
+  "instructions": [
+    "AGENTS.md"
+  ]
+}

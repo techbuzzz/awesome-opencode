@@ -1,0 +1,63 @@
+// opencode.jsonc — Configuration for Astro + Tailwind CSS projects
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+
+  "mcp": {
+    // Context7 — Astro, Tailwind, TypeScript docs
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+
+    // Playwright — E2E testing for Astro pages
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp"],
+      "enabled": false
+    },
+
+    // Grep — find UI patterns on GitHub
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app",
+      "enabled": false
+    }
+  },
+
+  "tools": {
+    "playwright_*": false,
+    "gh_grep_*": false
+  },
+
+  "permission": {
+    "skill": {
+      "typescript-astro": "allow",
+      "tailwind-ui": "allow",
+      "code-review": "allow",
+      "tdd": "allow",
+      "git-flow": "allow",
+      "*": "allow"
+    }
+  },
+
+  "agent": {
+    "e2e-tester": {
+      "tools": { "playwright_*": true },
+      "permission": {
+        "skill": { "tdd": "allow" }
+      }
+    },
+    "ui-builder": {
+      "permission": {
+        "skill": {
+          "typescript-astro": "allow",
+          "tailwind-ui": "allow"
+        }
+      }
+    }
+  },
+
+  "instructions": ["AGENTS.md"]
+}
