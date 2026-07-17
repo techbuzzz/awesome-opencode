@@ -348,6 +348,73 @@ Model Context Protocol servers extend OpenCode with external tools and services.
 
 ---
 
+### MCP Configuration Examples
+
+Copy-paste these configs into your `opencode.jsonc` under the `"mcp"` section:
+
+#### Context7
+
+```jsonc
+"context7": {
+  "type": "remote",
+  "url": "https://mcp.context7.com/mcp",
+  "enabled": true
+}
+```
+
+**Usage:** Add `use context7` to your prompts.
+
+#### GitHub
+
+```jsonc
+"github": {
+  "type": "remote",
+  "url": "https://api.githubcopilot.com/mcp/",
+  "oauth": {},
+  "enabled": false
+}
+```
+
+**Authenticate:** `opencode mcp auth github`  
+**Usage:** Add `use the github tool` to your prompts.
+
+#### Filesystem
+
+```jsonc
+"filesystem": {
+  "type": "local",
+  "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "."],
+  "enabled": true
+}
+```
+
+#### Grep by Vercel
+
+```jsonc
+"gh_grep": {
+  "type": "remote",
+  "url": "https://mcp.grep.app",
+  "enabled": true
+}
+```
+
+**Usage:** `use the gh_grep tool to find examples of [pattern]`
+
+#### Sentry
+
+```jsonc
+"sentry": {
+  "type": "remote",
+  "url": "https://mcp.sentry.dev/mcp",
+  "oauth": {},
+  "enabled": false
+}
+```
+
+**Authenticate:** `opencode mcp auth sentry`
+
+---
+
 ### Managing MCP Servers
 
 **Disable globally, enable per-agent (recommended for large setups):**
