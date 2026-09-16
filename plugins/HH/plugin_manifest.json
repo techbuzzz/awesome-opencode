@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "HH Job Agent — Viktor Buzin",
+  "name_for_model": "hh_job_agent",
+  "description_for_human": "Агент поиска работы на hh.ru для Виктора Бузина: анализ вакансий, ATS-адаптация резюме, сопроводительные письма без шаблонов, follow-up и подготовка к интервью.",
+  "description_for_model": "This plugin helps Viktor Buzin (Head of Software Development, 15+ years, Berlin) with job search on hh.ru. It analyzes vacancies for relevance and ATS keywords, adapts resume blocks to match specific job descriptions, writes concise non-AI-sounding cover letters with real metrics, generates follow-up messages, and prepares interview materials. Always responds in Russian unless the vacancy is in English. Never uses AI clichés or generic phrases in generated texts.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://your-deployment-url/openapi.json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://upload.wikimedia.org/wikipedia/commons/1/14/SC-Project_LOGO.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original",
+  "contact_email": "buzin.victor@gmail.com",
+  "legal_info_url": "https://your-deployment-url/legal"
+}

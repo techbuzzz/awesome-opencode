@@ -1,0 +1,363 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "HH Job Search Agent — Viktor Buzin",
+    "version": "1.0.0",
+    "description": "Agent for job search on hh.ru: vacancy analysis, ATS resume adaptation, cover letter writing, follow-up messages and interview preparation. Designed for Viktor Buzin, Head of Software Development, 15+ years experience."
+  },
+  "paths": {
+    "/analyze_vacancy": {
+      "post": {
+        "operationId": "analyze_vacancy",
+        "summary": "Analyse a vacancy from hh.ru",
+        "description": "Evaluates relevance of the vacancy for Viktor Buzin, extracts ATS keywords, and gives specific resume adaptation recommendations. Returns structured analysis in 4 sections: relevance scores, ATS keywords, resume changes, risks.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["vacancy_text"],
+                "properties": {
+                  "vacancy_text": {
+                    "type": "string",
+                    "description": "Full text of the vacancy description copied from hh.ru"
+                  },
+                  "vacancy_url": {
+                    "type": "string",
+                    "description": "Optional URL of the vacancy on hh.ru"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["ru", "en"],
+                    "default": "ru",
+                    "description": "Language for the analysis output"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured vacancy analysis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "relevance": {
+                      "type": "object",
+                      "properties": {
+                        "level_score": { "type": "string", "enum": ["high", "medium", "low"] },
+                        "stack_score": { "type": "string", "enum": ["high", "medium", "low"] },
+                        "tasks_score": { "type": "string", "enum": ["high", "medium", "low"] },
+                        "recommendation": { "type": "string", "enum": ["apply", "apply_with_notes", "skip"] }
+                      }
+                    },
+                    "ats_keywords": {
+                      "type": "object",
+                      "properties": {
+                        "hard_skills": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "management_skills": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        }
+                      }
+                    },
+                    "resume_changes": {
+                      "type": "object",
+                      "properties": {
+                        "about_section": { "type": "string" },
+                        "experience_blocks": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "skills_to_highlight": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        }
+                      }
+                    },
+                    "risks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "risk": { "type": "string" },
+                          "mitigation": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/write_cover_letter": {
+      "post": {
+        "operationId": "write_cover_letter",
+        "summary": "Write a cover letter for a vacancy",
+        "description": "Generates a concise, non-AI-sounding cover letter (150-250 words) for Viktor Buzin tailored to the provided vacancy. Uses real achievements and metrics. No clichés, no generic phrases.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["vacancy_text"],
+                "properties": {
+                  "vacancy_text": {
+                    "type": "string",
+                    "description": "Full text of the vacancy description"
+                  },
+                  "tone": {
+                    "type": "string",
+                    "enum": ["professional", "direct", "warm"],
+                    "default": "professional",
+                    "description": "Tone of the cover letter"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["ru", "en"],
+                    "default": "ru",
+                    "description": "Language of the cover letter — match the vacancy language"
+                  },
+                  "specific_case": {
+                    "type": "string",
+                    "description": "Optional: specific achievement or case from Viktor's background to emphasize"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cover letter text ready to paste into hh.ru",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cover_letter": {
+                      "type": "string",
+                      "description": "Ready-to-use cover letter text"
+                    },
+                    "word_count": {
+                      "type": "integer",
+                      "description": "Word count of the generated letter"
+                    },
+                    "key_case_used": {
+                      "type": "string",
+                      "description": "Which achievement from Viktor's background was used as the main case"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/adapt_resume": {
+      "post": {
+        "operationId": "adapt_resume",
+        "summary": "Adapt resume blocks for a specific vacancy",
+        "description": "Rewrites specified resume sections (about, experience, skills) to match ATS requirements of the vacancy. Integrates exact keywords from the job description without changing facts or metrics.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["vacancy_text"],
+                "properties": {
+                  "vacancy_text": {
+                    "type": "string",
+                    "description": "Full text of the vacancy description"
+                  },
+                  "blocks_to_adapt": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["about", "experience_sefe", "experience_gazprom", "experience_kofax", "skills"]
+                    },
+                    "default": ["about", "skills"],
+                    "description": "Which resume blocks to rewrite"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["ru", "en"],
+                    "default": "ru",
+                    "description": "Language of the output — match the vacancy language"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Adapted resume blocks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "adapted_blocks": {
+                      "type": "object",
+                      "description": "Map of block name to adapted text",
+                      "additionalProperties": { "type": "string" }
+                    },
+                    "keywords_integrated": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "List of ATS keywords that were integrated into the text"
+                    },
+                    "changes_summary": {
+                      "type": "string",
+                      "description": "Brief explanation of what was changed and why"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate_followup": {
+      "post": {
+        "operationId": "generate_followup",
+        "summary": "Generate a follow-up message after no response",
+        "description": "Creates a short, non-pushy follow-up message to send via hh.ru chat when an application has been viewed but not answered for 5+ days.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["position_title", "days_since_application"],
+                "properties": {
+                  "position_title": {
+                    "type": "string",
+                    "description": "Job title applied for"
+                  },
+                  "company_name": {
+                    "type": "string",
+                    "description": "Company name (optional)"
+                  },
+                  "days_since_application": {
+                    "type": "integer",
+                    "description": "How many days since the application was submitted"
+                  },
+                  "recruiter_name": {
+                    "type": "string",
+                    "description": "Recruiter's name if known"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["ru", "en"],
+                    "default": "ru"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Follow-up message text",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Ready-to-send follow-up message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prepare_interview": {
+      "post": {
+        "operationId": "prepare_interview",
+        "summary": "Prepare interview materials for a vacancy",
+        "description": "Generates interview preparation kit: 90-second self-pitch, 3 questions for the employer, answer to 'why are you leaving', and likely technical/management questions based on the vacancy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["vacancy_text"],
+                "properties": {
+                  "vacancy_text": {
+                    "type": "string",
+                    "description": "Full text of the vacancy description"
+                  },
+                  "interview_stage": {
+                    "type": "string",
+                    "enum": ["hr_screen", "technical", "final"],
+                    "default": "hr_screen",
+                    "description": "Stage of the interview process"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["ru", "en"],
+                    "default": "ru"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Interview preparation materials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "self_pitch": {
+                      "type": "string",
+                      "description": "90-120 second self-presentation pitch"
+                    },
+                    "questions_for_employer": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "3 smart questions to ask the employer"
+                    },
+                    "why_leaving_answer": {
+                      "type": "string",
+                      "description": "Honest, positive answer to 'why are you leaving'"
+                    },
+                    "likely_questions": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "Predicted interview questions based on the vacancy"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
