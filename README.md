@@ -296,6 +296,7 @@ Model Context Protocol servers extend OpenCode with external tools and services.
 | **[opencode-mcp](https://github.com/AlaeddineMessadi/opencode-mcp)** | Delegate coding tasks to OpenCode from other AI clients | `npx -y opencode-mcp` |
 | **[Firecrawl MCP](https://github.com/mendableai/firecrawl-mcp-server)** | Web scraping, crawling, search with clean markdown output | `npx -y firecrawl-mcp` |
 | **[AgentDeals](https://github.com/awesome-opencode/awesome-opencode)** | MCP aggregating developer tool deals | - |
+| **[Statsnet](https://github.com/usenetstate/statsnet-mcp)** | Background check any company in the world: registration, executives, courts and finances. Remote: `https://statsnet.co/mcp` | URL: `https://statsnet.co/mcp` |
 
 ### Databases
 
