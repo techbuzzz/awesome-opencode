@@ -219,6 +219,7 @@ Plugins are JavaScript/TypeScript modules that hook into OpenCode runtime events
 | **[hiai-opencode](https://github.com/awesome-opencode/awesome-opencode)** | Canonical 12-agent model with bundled skills, MCP, LSP | ⭐ |
 | **[Background Agents](https://github.com/awesome-opencode/awesome-opencode)** | Async agent delegation for background tasks | ⭐ |
 | **[Subagent Reporter](https://github.com/awesome-opencode/awesome-opencode)** | See exactly what your subagents are doing | ⭐ |
+| **[opencode-multi-llm](https://github.com/beastlabai/multi-llm-plugin)** | Parallel plan, code, and commit reviews across 19 coding CLIs, with validated findings, task generation, implementation, and automated revision. | 11 ⭐ |
 
 ### Memory & Context
 
