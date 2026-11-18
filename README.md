@@ -246,6 +246,7 @@ Plugins are JavaScript/TypeScript modules that hook into OpenCode runtime events
 | **[Vibe Coding Slack Notifier](https://github.com/awesome-opencode/awesome-opencode)** | Slack DM alerts for task completion |
 | **[Morph Fast Apply](https://github.com/awesome-opencode/awesome-opencode)** | 10,500+ tokens/sec code editing |
 | **[Opencode Quota](https://github.com/awesome-opencode/awesome-opencode)** | Quota toasts and real-time token tracking |
+| **[OpenCode Scratchpad](https://github.com/adikpb/opencode-scratchpad)** | Per-project Markdown scratchpad with `/scratch` capture, a modal editor, and a sidebar preview |
 
 ### Code Quality & Review
 
